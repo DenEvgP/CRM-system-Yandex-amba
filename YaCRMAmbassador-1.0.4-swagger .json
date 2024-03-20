@@ -1,0 +1,1802 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "YaCRMAmbassador",
+    "description" : "YaCRMAmbassador",
+    "version" : "1.0.4"
+  },
+  "tags" : [ {
+    "name" : "Ambassador",
+    "description" : "Ambassador"
+  }, {
+    "name" : "Candidate",
+    "description" : "Candidate"
+  }, {
+    "name" : "Messages",
+    "description" : "Messages"
+  }, {
+    "name" : "Report",
+    "description" : "Report"
+  }, {
+    "name" : "Merchandise",
+    "description" : "Merchandise"
+  }, {
+    "name" : "Statistic",
+    "description" : "Statistic"
+  } ],
+  "paths" : {
+    "/api/v1/ambassador" : {
+      "get" : {
+        "tags" : [ "Ambassador" ],
+        "summary" : "Список амбассадоров с сортировкой и филльтром",
+        "operationId" : "showlistambassador",
+        "parameters" : [ {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "sorting field",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "description" : "Направление сортировки (asc или desc)",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "asc", "desc" ]
+          }
+        }, {
+          "name" : "ambassador-status",
+          "in" : "query",
+          "description" : "Статус",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "lastname",
+          "in" : "query",
+          "description" : "Фамилия",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "firstname",
+          "in" : "query",
+          "description" : "Имя",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "middlename",
+          "in" : "query",
+          "description" : "Отчество",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "program-name",
+          "in" : "query",
+          "description" : "Программа",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "sex",
+          "in" : "query",
+          "description" : "Пол",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "м", "ж" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ListAmbassadorSchema"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Ambassador" ],
+        "summary" : "Добавление амбассадора",
+        "operationId" : "addambassador",
+        "requestBody" : {
+          "description" : "Add an existent ambassador",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AmbassadorSchema"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AmbassadorSchema"
+                }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ambassador/{id}" : {
+      "patch" : {
+        "tags" : [ "Ambassador" ],
+        "summary" : "Точечное редактирование данных амбассадора",
+        "operationId" : "editambassador",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id_ambassador",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Update an existent ambassador",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AmbassadorSchema"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AmbassadorSchema"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "404" : {
+            "description" : "User not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      },
+      "get" : {
+        "tags" : [ "Ambassador" ],
+        "summary" : "Персональные данные амбассадора",
+        "operationId" : "showambassadorprivateinfo",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ambassador id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AmbassadorSchema"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "404" : {
+            "description" : "User not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Ambassador" ],
+        "summary" : "Обновление данных амбассадора",
+        "operationId" : "editambassador",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id_ambassador",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Update an existent ambassador",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AmbassadorSchema"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AmbassadorSchema"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "404" : {
+            "description" : "User not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Ambassador" ],
+        "summary" : "Удаление амбассадора",
+        "operationId" : "deleteambassador",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id_ambassador",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Successful Response"
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ambassador/{id}/status" : {
+      "patch" : {
+        "tags" : [ "Ambassador" ],
+        "summary" : "Изменение статуса амбассадора",
+        "operationId" : "editStatusAmbassador",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id_ambassador",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Update an existent ambassador",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AmbassadorPartialUpdateSchema"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "404" : {
+            "description" : "User not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/api/v1/сandidate" : {
+      "post" : {
+        "tags" : [ "Candidate" ],
+        "summary" : "Добавление данных кандидата",
+        "operationId" : "addCandidate",
+        "requestBody" : {
+          "description" : "Add an existent Candidate",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FormCandidateSchema"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FormCandidateSchema"
+                }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/сandidate/{id}" : {
+      "get" : {
+        "tags" : [ "Candidate" ],
+        "summary" : "Персональные данные кандидаита",
+        "operationId" : "showcandidaterprivateinfo",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "candidate id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "status_name",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "default" : "Кандидат",
+            "title" : "status_name"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FormCandidateSchema"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "404" : {
+            "description" : "User not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Candidate" ],
+        "summary" : "Удаление кандидата",
+        "operationId" : "deletcandidate",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id_candidate",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Successful Response"
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/report" : {
+      "get" : {
+        "tags" : [ "Report" ],
+        "summary" : "Отчеты о выполнении задания",
+        "operationId" : "reportlist",
+        "parameters" : [ {
+          "name" : "id_ambassador",
+          "in" : "query",
+          "description" : "Groupped by id_ambassador",
+          "required" : false,
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfull Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ReportSchema"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad input parameter"
+          },
+          "404" : {
+            "description" : "Report not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Report" ],
+        "summary" : "Добавление отчета",
+        "operationId" : "addreport",
+        "requestBody" : {
+          "description" : "Add an existent report",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ReportSchema"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ReportSchema"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad input parameter"
+          },
+          "404" : {
+            "description" : "Report not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/api/v1/report/{id}" : {
+      "get" : {
+        "tags" : [ "Report" ],
+        "summary" : "Отчет о выполнении задания",
+        "operationId" : "reportinfo",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "report id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ReportSchema"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad input parameter"
+          },
+          "404" : {
+            "description" : "Report not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "Report" ],
+        "summary" : "Редактирование отчета",
+        "operationId" : "editreport",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "report id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Update an existent report",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ReportSchema"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ReportSchema"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad input parameter"
+          },
+          "404" : {
+            "description" : "Report not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/api/v1/messages" : {
+      "get" : {
+        "tags" : [ "Messages" ],
+        "summary" : "История рассылки",
+        "operationId" : "messages",
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Messages"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "404" : {
+            "description" : "Messages not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Messages" ],
+        "summary" : "Добавление сообщения",
+        "operationId" : "addMessages",
+        "requestBody" : {
+          "description" : "Add new Messages",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Messages"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Messages"
+                }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/merchandise" : {
+      "post" : {
+        "tags" : [ "Merchandise" ],
+        "summary" : "Заявка на мерч",
+        "operationId" : "addMerchandise",
+        "requestBody" : {
+          "description" : "Add new merchandise",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Merchandise"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Merchandise"
+                }
+              }
+            }
+          },
+          "422" : {
+            "description" : "Validation Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/merchandise/{id}" : {
+      "get" : {
+        "tags" : [ "Merchandise" ],
+        "summary" : "история направления мерча",
+        "operationId" : "Merchandiseinfo",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ambassador id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Merchandise"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "404" : {
+            "description" : "Messages not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/api/v1/listAnalysis" : {
+      "get" : {
+        "tags" : [ "Statistic" ],
+        "summary" : "анализ списочного состава",
+        "operationId" : "ListAnalysisinfo",
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ListAnalysisSchema"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Messages not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/api/v1/amountDay" : {
+      "get" : {
+        "tags" : [ "Statistic" ],
+        "summary" : "количество амбассадоров по статусам и программам",
+        "operationId" : "amountinfo",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "selection_date",
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AmountSchema"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "404" : {
+            "description" : "Messages not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/api/v1/amountPeriod" : {
+      "get" : {
+        "tags" : [ "Statistic" ],
+        "summary" : "сравнительный анализ",
+        "operationId" : "amountпinfo",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "start_date",
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }, {
+          "in" : "query",
+          "name" : "end_date",
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AmountAnalisisSchema"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "404" : {
+            "description" : "Messages not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/api/v1/budget" : {
+      "get" : {
+        "tags" : [ "Statistic" ],
+        "summary" : "финнансирования программы лояльности",
+        "operationId" : "budgetinfo",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "start_date",
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }, {
+          "in" : "query",
+          "name" : "end_date",
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SumBudgetSchema"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          },
+          "404" : {
+            "description" : "Messages not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      }
+    },
+    "/api/v1/questions" : {
+      "get" : {
+        "tags" : [ "Statistic" ],
+        "summary" : "часто повторяющиеся вопросы",
+        "operationId" : "questions",
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/OftenQuestion"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Messages not found"
+          },
+          "default" : {
+            "description" : "Ошибка сервера"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "AmbassadorSchema" : {
+        "properties" : {
+          "id_ambassador" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_ambassador "
+          },
+          "Status" : {
+            "$ref" : "#/components/schemas/AmbassadorStatusEnum"
+          },
+          "nickname" : {
+            "type" : "string",
+            "title" : "nickname"
+          },
+          "promocode" : {
+            "type" : "string",
+            "title" : "promocode"
+          },
+          "date_receipt" : {
+            "type" : "string",
+            "format" : "date-time",
+            "title" : "date_receipt"
+          },
+          "Form" : {
+            "$ref" : "#/components/schemas/FormAmbassadorSchema"
+          },
+          "reminder_counter" : {
+            "type" : "integer",
+            "title" : "reminder_counter"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_ambassador", "last_name", "first_name", "middle_name", "promocode", "nickname", "date_receipt", "sex", "email", "phone_number" ],
+        "title" : "AmbassadorSchema"
+      },
+      "ListAmbassadorSchema" : {
+        "properties" : {
+          "id_ambassador" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_ambassador"
+          },
+          "Status" : {
+            "$ref" : "#/components/schemas/AmbassadorStatusEnum"
+          },
+          "last_name" : {
+            "type" : "string",
+            "title" : "last_name"
+          },
+          "first_name" : {
+            "type" : "string",
+            "title" : "first_name"
+          },
+          "middle_name" : {
+            "type" : "string",
+            "title" : "Middle Name"
+          },
+          "promocode" : {
+            "type" : "string",
+            "title" : "promocode"
+          },
+          "nickname" : {
+            "type" : "string",
+            "title" : "nickname"
+          },
+          "program_name" : {
+            "type" : "string",
+            "title" : "program_name"
+          },
+          "sex" : {
+            "type" : "string",
+            "title" : "sex"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_ambassador", "status_name", "last_name", "first_name", "middle_name", "promocode", "nickname", "sex", "program_name" ],
+        "title" : "ListAmbassadorSchema"
+      },
+      "AmbassadorCreateSchema" : {
+        "properties" : {
+          "id_ambassador" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_ambassador "
+          },
+          "promocode" : {
+            "type" : "string",
+            "title" : "promocode"
+          },
+          "date_receipt" : {
+            "type" : "string",
+            "format" : "date-time",
+            "title" : "date_receipt"
+          },
+          "id_form" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_form"
+          },
+          "id_status" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_status"
+          },
+          "id_telegram" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_telegram"
+          },
+          "id_manager" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_manager"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_ambassador", "promocode", "date_receipt", "reminder_counter", "id_form", "id_status", "id_telegram", "id_manager" ],
+        "title" : "AmbassadorCreateSchema"
+      },
+      "AmbassadorStatusEnum" : {
+        "type" : "string",
+        "enum" : [ "Активный", "На паузе", "Не амбассадор", "Уточняется", "Кандидат" ],
+        "title" : "AmbassadorStatusEnum"
+      },
+      "FormAmbassadorSchema" : {
+        "properties" : {
+          "id_form" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_form"
+          },
+          "last_name" : {
+            "type" : "string",
+            "title" : "last_name"
+          },
+          "first_name" : {
+            "type" : "string",
+            "title" : "first_name"
+          },
+          "middle_name" : {
+            "type" : "string",
+            "title" : "Middle Name"
+          },
+          "phone_number" : {
+            "type" : "string",
+            "title" : "phone_number"
+          },
+          "e-mail" : {
+            "type" : "string",
+            "title" : "e-mail"
+          },
+          "birthday" : {
+            "type" : "string",
+            "format" : "date-time",
+            "title" : "birthday"
+          },
+          "sex" : {
+            "type" : "string",
+            "enum" : [ "М", "Ж" ],
+            "title" : "sex"
+          },
+          "program_name" : {
+            "type" : "string",
+            "title" : "program_name"
+          },
+          "addendum" : {
+            "$ref" : "#/components/schemas/AddendumSchema"
+          },
+          "goal" : {
+            "$ref" : "#/components/schemas/GoalAmbassadorSchema"
+          },
+          "activity" : {
+            "$ref" : "#/components/schemas/ActivityAmbassadorEnum"
+          },
+          "address" : {
+            "$ref" : "#/components/schemas/AddressAmbassadorSchema"
+          },
+          "size" : {
+            "$ref" : "#/components/schemas/SizeAmbassadorSchema"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_form", "last_name", "first_name", "middle_name", "program_name", "sex", "email", "phone_number" ],
+        "title" : "FormAmbassadorSchema"
+      },
+      "FormCandidateSchema" : {
+        "properties" : {
+          "id_form" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_form"
+          },
+          "status_name" : {
+            "type" : "string",
+            "title" : "status_name",
+            "default" : "Кандидат"
+          },
+          "last_name" : {
+            "type" : "string",
+            "title" : "last_name"
+          },
+          "first_name" : {
+            "type" : "string",
+            "title" : "first_name"
+          },
+          "middle_name" : {
+            "type" : "string",
+            "title" : "Middle Name"
+          },
+          "phone_number" : {
+            "type" : "string",
+            "title" : "phone_number"
+          },
+          "e-mail" : {
+            "type" : "string",
+            "title" : "e-mail"
+          },
+          "program_name" : {
+            "type" : "string",
+            "title" : "program_name"
+          },
+          "activity" : {
+            "$ref" : "#/components/schemas/ActivityAmbassadorEnum"
+          },
+          "note" : {
+            "type" : "string",
+            "title" : "note"
+          },
+          "blog_link" : {
+            "type" : "string",
+            "title" : "blog_link"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_form", "last_name", "first_name", "middle_name", "phone_number", "e-mail" ],
+        "title" : "FormCandidateSchema"
+      },
+      "AmbassadorPartialUpdateSchema" : {
+        "properties" : {
+          "status_name" : {
+            "$ref" : "#/components/schemas/AmbassadorStatusEnum"
+          }
+        },
+        "type" : "object",
+        "required" : [ "status_name" ],
+        "title" : "AmbassadorPartialUpdateSchema"
+      },
+      "TelegramBotSchema" : {
+        "properties" : {
+          "id_telegram" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_telegram"
+          },
+          "nickname" : {
+            "type" : "string",
+            "title" : "nickname"
+          },
+          "active" : {
+            "type" : "string",
+            "title" : "active"
+          },
+          "registration_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "title" : "registration_time"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_telegram", "nickname", "active", "registration_time" ],
+        "title" : "TelegramBotSchema"
+      },
+      "OftenQuestion" : {
+        "properties" : {
+          "Question" : {
+            "type" : "string",
+            "title" : "Question"
+          }
+        },
+        "type" : "object",
+        "title" : "OftenQuestion"
+      },
+      "ListAnalysisSchema" : {
+        "properties" : {
+          "id_form" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_form"
+          },
+          "last_name" : {
+            "type" : "string",
+            "title" : "last_name"
+          },
+          "first_name" : {
+            "type" : "string",
+            "title" : "first_name"
+          },
+          "middle_name" : {
+            "type" : "string",
+            "title" : "Middle Name"
+          },
+          "amount_report" : {
+            "type" : "integer",
+            "title" : "amount_report"
+          },
+          "period_employment" : {
+            "type" : "string",
+            "title" : "period_employment"
+          },
+          "achive" : {
+            "type" : "string",
+            "title" : "achive"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_form", "last_name", "first_name" ],
+        "title" : "ListAnalysisSchema"
+      },
+      "ContactSchema" : {
+        "properties" : {
+          "id_contact" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_contact"
+          },
+          "phone_number" : {
+            "type" : "string",
+            "title" : "phone_number"
+          },
+          "e-mail" : {
+            "type" : "string",
+            "title" : "e-mail"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_contact", "phone_number", "e-mail" ],
+        "title" : "ContactSchema"
+      },
+      "AddendumSchema" : {
+        "properties" : {
+          "id_addendum" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_addendum"
+          },
+          "note" : {
+            "type" : "string",
+            "title" : "note"
+          },
+          "blog_link" : {
+            "type" : "string",
+            "title" : "blog_link"
+          },
+          "place_work" : {
+            "type" : "string",
+            "title" : "place_work"
+          },
+          "specialty_work" : {
+            "type" : "string",
+            "title" : "specialty_work"
+          },
+          "educational_institution" : {
+            "type" : "string",
+            "title" : "educational_institution"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_addendum" ],
+        "title" : "AddendumSchema"
+      },
+      "GoalAmbassadorSchema" : {
+        "properties" : {
+          "id_goal" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_goal"
+          },
+          "goal" : {
+            "$ref" : "#/components/schemas/GoalStatusEnum"
+          },
+          "goal_text" : {
+            "type" : "string",
+            "title" : "goal_text"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_goal", "goal" ],
+        "title" : "GoalAmbassadorSchema"
+      },
+      "GoalStatusEnum" : {
+        "type" : "string",
+        "enum" : [ "Получение новой профессии", "Углубление знаний", "Свой вариант" ],
+        "title" : "GoalStatusEnum"
+      },
+      "ActivityAmbassadorEnum" : {
+        "type" : "string",
+        "enum" : [ "Вести блог", "Развивать локальное профессиональное сообщество в своем городе", "Писать статьи", "Снимать видео или сниматься в них, если продакшн будет на нашей стороне", "Знакомить коллег на работе с продуктом Практикума через различные форматы", "Давать консультации и рассказывать всем про Практикум", "Выступать на мероприятиях" ],
+        "title" : "ActivityAmbassadorEnum"
+      },
+      "SizeAmbassadorSchema" : {
+        "properties" : {
+          "id_size" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_size"
+          },
+          "clothing_size" : {
+            "$ref" : "#/components/schemas/SizeEnum"
+          },
+          "shoe_size" : {
+            "type" : "integer",
+            "title" : "shoe_size"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_size", "clothing_size", "shoe_size" ],
+        "title" : "SizeAmbassadorSchema"
+      },
+      "SizeEnum" : {
+        "type" : "string",
+        "enum" : [ "XS", "S", "M", "L", "XL", "XXL" ],
+        "title" : "SizeEnum"
+      },
+      "AddressAmbassadorSchema" : {
+        "properties" : {
+          "id_address" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_address"
+          },
+          "country" : {
+            "type" : "string",
+            "title" : "country"
+          },
+          "index" : {
+            "type" : "string",
+            "title" : "index"
+          },
+          "region" : {
+            "type" : "string",
+            "title" : "region"
+          },
+          "district" : {
+            "type" : "string",
+            "title" : "district"
+          },
+          "settlement" : {
+            "type" : "string",
+            "title" : "settlement"
+          },
+          "street" : {
+            "type" : "string",
+            "title" : "street"
+          },
+          "house" : {
+            "type" : "string",
+            "title" : "house"
+          },
+          "building" : {
+            "type" : "string",
+            "title" : "building"
+          },
+          "apartment" : {
+            "type" : "string",
+            "title" : "apartment"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_address", "country" ],
+        "title" : "AddressAmbassadorSchema"
+      },
+      "Messages" : {
+        "properties" : {
+          "id_message" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_message"
+          },
+          "message_dispath_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "title" : "message_dispath_time"
+          },
+          "message_text" : {
+            "type" : "string",
+            "title" : "message_text"
+          },
+          "answer_text" : {
+            "type" : "string",
+            "title" : "message_text"
+          },
+          "answer_dispath_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "title" : "answer_dispath_time"
+          },
+          "reaction" : {
+            "type" : "string",
+            "title" : "reaction"
+          },
+          "sign_artificial_intelligence" : {
+            "type" : "boolean",
+            "title" : "sign_artificial_intelligence",
+            "default" : "false"
+          },
+          "messages_status" : {
+            "$ref" : "#/components/schemas/MessagesStatusEnum"
+          },
+          "messages_type" : {
+            "$ref" : "#/components/schemas/MessagesTypeEnum"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_message", "message_text", "message_dispath_time" ],
+        "title" : "Messages"
+      },
+      "MessagesStatusEnum" : {
+        "type" : "string",
+        "enum" : [ " ", "Отложенная", "Черновик", "Шаблон" ],
+        "title" : "MessagesStatusEnum"
+      },
+      "MessagesTypeEnum" : {
+        "type" : "string",
+        "enum" : [ "вопрос", "анкета", "отчет по гайду", "подтверждение адреса", "запрос на изменение данных" ],
+        "title" : "MessagesTypeEnum"
+      },
+      "Merchandise" : {
+        "properties" : {
+          "id_merchandise" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_merchandise"
+          },
+          "request_date" : {
+            "type" : "string",
+            "format" : "date-time",
+            "title" : "request_date"
+          },
+          "merchandise_name" : {
+            "$ref" : "#/components/schemas/merchandiseEnum"
+          },
+          "delivery_address" : {
+            "$ref" : "#/components/schemas/AddressAmbassadorSchema"
+          },
+          "request_status" : {
+            "type" : "boolean",
+            "title" : "request_status"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_merchandise", "merchandise_name", "delivery_address", "request_date" ],
+        "title" : "Merchandise"
+      },
+      "merchandiseEnum" : {
+        "type" : "string",
+        "enum" : [ "Толстовка", "Кофе", "Стикеры", "Плюс", "Арзамас", "Шоппер", "Рюкзак", "Сумка кросс", "Носки", "Скидка 50%", "Алиса мини", "Алиса биг", "Клуб учащихся ночью" ],
+        "title" : "MessagesStatusEnum"
+      },
+      "ReportSchema" : {
+        "properties" : {
+          "id_report" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_report "
+          },
+          "id_ambassador" : {
+            "type" : "string",
+            "format" : "uuid",
+            "title" : "id_ambassador"
+          },
+          "report_date" : {
+            "type" : "string",
+            "format" : "date-time",
+            "title" : "preport_date"
+          },
+          "content_link" : {
+            "type" : "string",
+            "title" : "content_link"
+          },
+          "screen" : {
+            "type" : "string",
+            "title" : "screen"
+          },
+          "placement" : {
+            "type" : "string",
+            "title" : "placement"
+          },
+          "sing_junior" : {
+            "type" : "string",
+            "title" : "sing_junior"
+          },
+          "run_status" : {
+            "type" : "string",
+            "title" : "run_status"
+          }
+        },
+        "type" : "object",
+        "required" : [ "id_report", "preport_date", "content_link", "placement" ],
+        "title" : "ReportSchema"
+      },
+      "BudgetSchema" : {
+        "properties" : {
+          "merchandise_name" : {
+            "type" : "string",
+            "title" : "merchandise_name"
+          },
+          "count_merchandise" : {
+            "type" : "integer",
+            "title" : "count_merchandise"
+          },
+          "price" : {
+            "type" : "integer",
+            "title" : "price"
+          },
+          "cost" : {
+            "type" : "integer",
+            "title" : "cost"
+          }
+        },
+        "type" : "object",
+        "required" : [ "merchandise_name", "count_merchandise", "cost" ],
+        "title" : "BudgetSchema"
+      },
+      "SumBudgetSchema" : {
+        "properties" : {
+          "Sum_count_merchandise" : {
+            "type" : "integer",
+            "title" : "Sum_count_merchandise"
+          },
+          "Sum_cost" : {
+            "type" : "integer",
+            "title" : "Sum_cost"
+          },
+          "Budget_merchandise" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/BudgetSchema"
+            }
+          }
+        },
+        "type" : "object",
+        "required" : [ "Sum_count_merchandise", "Sum_cost" ],
+        "title" : "SumBudgetSchema"
+      },
+      "AmountSchema" : {
+        "properties" : {
+          "total_Amount_ambassdor" : {
+            "type" : "integer",
+            "title" : "total_Amount_ambassdor"
+          },
+          "StatusAmount" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/StatusAmountSchema"
+            }
+          },
+          "ProgramAmount" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProgramAmountSchema"
+            }
+          }
+        },
+        "type" : "object",
+        "required" : [ "total_Amount_ambassdor" ],
+        "title" : "AmountSchema"
+      },
+      "StatusAmountSchema" : {
+        "properties" : {
+          "status_name" : {
+            "type" : "string",
+            "title" : "status_name"
+          },
+          "amount_ambassdor_status" : {
+            "type" : "integer",
+            "title" : "amount_ambassdor_status"
+          }
+        },
+        "type" : "object",
+        "required" : [ "status_name" ],
+        "title" : "StatusAmountSchema"
+      },
+      "ProgramAmountSchema" : {
+        "properties" : {
+          "program_name" : {
+            "type" : "string",
+            "title" : "program_name"
+          },
+          "amount_ambassdor_program" : {
+            "type" : "integer",
+            "title" : "amount_ambassdor_program"
+          }
+        },
+        "type" : "object",
+        "required" : [ "program_name" ],
+        "title" : "ProgramAmountSchema"
+      },
+      "AmountAnalisisSchema" : {
+        "properties" : {
+          "AmountMessage" : {
+            "$ref" : "#/components/schemas/AmountMessageSchema"
+          },
+          "AmountMessageAnswer" : {
+            "$ref" : "#/components/schemas/AmountMessageAnswerSchema"
+          },
+          "AmountReport" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AmountReportSchema"
+            }
+          },
+          "FinanceMerchandise" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FinanceMerchandiseSchema"
+            }
+          }
+        },
+        "type" : "object",
+        "required" : [ "total_Amount_ambassdor" ],
+        "title" : "AmountAnalisisSchema"
+      },
+      "AmountMessageSchema" : {
+        "properties" : {
+          "Amount_message_day" : {
+            "type" : "integer",
+            "title" : "Amount_message_day"
+          },
+          "Amount_message_week" : {
+            "type" : "integer",
+            "title" : "Amount_message_week"
+          },
+          "Amount_message_month" : {
+            "type" : "integer",
+            "title" : "Amount_message_month"
+          }
+        },
+        "type" : "object",
+        "required" : [ "Amount_message_day", "Amount_message_week", "Amount_message_month" ],
+        "title" : "AmountMessageSchema"
+      },
+      "AmountReportSchema" : {
+        "properties" : {
+          "month_name" : {
+            "type" : "string",
+            "title" : "month_name"
+          },
+          "amount_report_month" : {
+            "type" : "integer",
+            "title" : "amount_report_month"
+          }
+        },
+        "type" : "object",
+        "required" : [ "month_name" ],
+        "title" : "AmountReportSchema"
+      },
+      "AmountMessageAnswerSchema" : {
+        "properties" : {
+          "Amount_message" : {
+            "type" : "integer",
+            "title" : "Amount_message"
+          },
+          "Amount_Answer" : {
+            "type" : "integer",
+            "title" : "Amount_Answer"
+          },
+          "Amount_reaction" : {
+            "type" : "integer",
+            "title" : "Amount_reaction"
+          }
+        },
+        "type" : "object",
+        "required" : [ "Amount_message" ],
+        "title" : "AmountMessageAnswerSchema"
+      },
+      "FinanceMerchandiseSchema" : {
+        "properties" : {
+          "month_name" : {
+            "type" : "string",
+            "title" : "month_name"
+          },
+          "Cost_Merchandise_month" : {
+            "type" : "integer",
+            "title" : "Cost_Merchandise_month"
+          }
+        },
+        "type" : "object",
+        "required" : [ "month_name" ],
+        "title" : "FinanceMerchandiseSchema"
+      },
+      "HTTPValidationError" : {
+        "properties" : {
+          "detail" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ValidationError"
+            },
+            "type" : "array",
+            "title" : "Detail"
+          }
+        },
+        "type" : "object",
+        "title" : "HTTPValidationError"
+      },
+      "ValidationError" : {
+        "properties" : {
+          "loc" : {
+            "items" : {
+              "anyOf" : [ {
+                "type" : "string"
+              }, {
+                "type" : "integer"
+              } ]
+            },
+            "type" : "array",
+            "title" : "Location"
+          },
+          "msg" : {
+            "type" : "string",
+            "title" : "Message"
+          },
+          "type" : {
+            "type" : "string",
+            "title" : "Error Type"
+          }
+        },
+        "type" : "object",
+        "required" : [ "loc", "msg", "type" ],
+        "title" : "ValidationError"
+      }
+    }
+  }
+}
